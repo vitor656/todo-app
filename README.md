@@ -4,6 +4,8 @@ API REST para gestão de tarefas (to-do), construída em **.NET 10** com **Clean
 **Vertical Slice**. Vocabulário do domínio (entidade, rotas, campos JSON, mensagens) em
 português; termos técnicos (`Result`, `Error`, `Endpoint`, etc.) em inglês.
 
+> **Instância em produção:** <https://todo-api-riq0.onrender.com/swagger/index.html>
+
 ## Sumário
 
 1. [Visão geral](#1-visão-geral)
