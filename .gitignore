@@ -1,0 +1,22 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+
+## Testes e cobertura
+coverage-results/
+TestResults/
+*.trx
+
+## Aspire
+**/.aspire/
+
+## Editores e SO
+.vs/
+.vscode/
+*.swp
+.DS_Store
+
+## Docker
+*.pid
