@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+.git/
+.github/
+tests/
+docs/
+**/.aspire/
+**/.vs/
+**/.vscode/
+*.md
+coverage-results/
+TestResults/
