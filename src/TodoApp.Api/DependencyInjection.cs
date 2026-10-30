@@ -5,6 +5,7 @@ using TodoApp.Api.Contracts;
 using TodoApp.Api.Endpoints;
 using TodoApp.Api.ErrorHandling;
 using TodoApp.Api.OpenApi;
+using TodoApp.Api.Serialization;
 using TodoApp.Application;
 
 namespace TodoApp.Api;
@@ -28,6 +29,7 @@ public static class DependencyInjection
         {
             options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.Converters.Add(new UtcDateTimeJsonConverter());
         });
 
         foreach (var endpointType in typeof(DependencyInjection).Assembly.GetTypes()

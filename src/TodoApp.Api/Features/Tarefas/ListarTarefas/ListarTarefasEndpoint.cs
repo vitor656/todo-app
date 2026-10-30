@@ -2,6 +2,7 @@ using Mediator;
 using TodoApp.Api.Contracts;
 using TodoApp.Api.Endpoints;
 using TodoApp.Api.Messages;
+using TodoApp.Api.Serialization;
 using TodoApp.Application.Features.Tarefas.ListarTarefas;
 
 namespace TodoApp.Api.Features.Tarefas.ListarTarefas;
@@ -25,7 +26,10 @@ public sealed class ListarTarefasEndpoint : IEndpoint
         HttpContext httpContext,
         CancellationToken cancellationToken)
     {
-        var input = new ListarTarefasInput(status, vencimentoDe, vencimentoAte);
+        var input = new ListarTarefasInput(
+            status,
+            vencimentoDe is null ? null : UtcDateTimeJsonConverter.ParaUtc(vencimentoDe.Value),
+            vencimentoAte is null ? null : UtcDateTimeJsonConverter.ParaUtc(vencimentoAte.Value));
         var result = await mediator.Send(input, cancellationToken);
 
         return ResultHttpMapper.ToHttpResult(result, httpContext, ApiMessages.TarefasListadas);
