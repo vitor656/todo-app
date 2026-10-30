@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using TodoApp.Api.Contracts;
 using TodoApp.Api.Endpoints;
 using TodoApp.Api.ErrorHandling;
+using TodoApp.Api.OpenApi;
 using TodoApp.Application;
 
 namespace TodoApp.Api;
@@ -21,7 +22,7 @@ public static class DependencyInjection
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        services.AddOpenApi();
+        services.AddOpenApi(options => options.AddSchemaTransformer<TarefaSchemaTransformer>());
 
         services.ConfigureHttpJsonOptions(options =>
         {
