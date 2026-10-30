@@ -1,0 +1,24 @@
+databases:
+  - name: todo-db
+    plan: free
+    databaseName: tododb
+    user: todoapp
+
+services:
+  - type: web
+    name: todo-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Database__MigrateOnStartup
+        value: "true"
+      - key: Swagger__Habilitado
+        value: "true"
+      - key: ConnectionStrings__Default
+        fromDatabase:
+          name: todo-db
+          property: connectionString
