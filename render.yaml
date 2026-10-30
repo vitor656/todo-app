@@ -1,9 +1,3 @@
-databases:
-  - name: todo-db
-    plan: free
-    databaseName: tododb
-    user: todoapp
-
 services:
   - type: web
     name: todo-api
@@ -19,6 +13,4 @@ services:
       - key: Swagger__Habilitado
         value: "true"
       - key: ConnectionStrings__Default
-        fromDatabase:
-          name: todo-db
-          property: connectionString
+        sync: false
