@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using TodoApp.Api.Contracts;
@@ -43,6 +44,18 @@ public static class DependencyInjection
 
     public static WebApplication UseApi(this WebApplication app)
     {
+        // A Api roda atrás de um proxy reverso em produção (ex.: Render), que termina o TLS
+        // e repassa a requisição em HTTP puro. Sem isso, Request.Scheme fica sempre "http",
+        // fazendo o documento OpenAPI anunciar um servidor "http://" e o navegador (em HTTPS)
+        // bloquear as chamadas do Swagger UI por esquema inválido.
+        var forwardedHeadersOptions = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+        };
+        forwardedHeadersOptions.KnownIPNetworks.Clear();
+        forwardedHeadersOptions.KnownProxies.Clear();
+        app.UseForwardedHeaders(forwardedHeadersOptions);
+
         app.UseExceptionHandler();
         app.UseStatusCodePages(async statusCodeContext =>
         {
