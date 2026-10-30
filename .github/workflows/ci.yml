@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      - name: Compilar a solução
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Executar os testes com cobertura
+        run: >
+          dotnet test tests/TodoApp.Tests --no-build --configuration Release
+          --collect:"XPlat Code Coverage" --settings tests/TodoApp.Tests/coverlet.runsettings
+          --results-directory ./coverage-results
+
+      - name: Publicar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-results/**/coverage.cobertura.xml
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Fazer checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Construir a imagem Docker da Api
+        run: docker build -t todo-api .
